@@ -1,0 +1,9 @@
+{
+  "watch": ["src"],
+  "delay": "2500",
+  "ignore": ["src/public/*", "test/*"],
+  "env": {
+    "NODE_ENV": "local"
+  },
+  "ext": "js,json,mjs,yaml,yml"
+}

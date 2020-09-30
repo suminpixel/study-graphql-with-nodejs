@@ -2,10 +2,30 @@
   "name": "study-graphql-with-nodejs",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "src/index.js",
   "author": "suminlee",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "format": "prettier --write \"./**/*.{js,html,css,ejs}\"",
+    "local": "nodemon src/index.js | pino-pretty --translateTime"
+  },
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "eslint-config-prettier": "^6.11.0",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.1.0"
+  },
+  "dependencies": {
+    "bson-objectid": "^1.3.1",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-pino-logger": "^5.0.0",
+    "lodash": "^4.17.20",
+    "method-override": "^3.0.0",
+    "multer": "^1.4.2",
+    "pino": "^6.6.0",
+    "pino-pretty": "^4.2.1",
+    "through2": "^4.0.2"
+  }
 }

@@ -1,0 +1,8 @@
+node_modules
+dist
+.idea/
+.vscode/
+.DS_Store
+.nyc_output
+*.log
+yarn-error.log
