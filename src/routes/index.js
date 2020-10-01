@@ -1,0 +1,6 @@
+const adminApis = require('./admin');
+
+//router 파일을 /nnn/ 단위로 하나로 묶어 제공
+module.exports = function routes(app) {
+  app.use('/admin/', adminApis);
+};

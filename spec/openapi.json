@@ -1,0 +1,920 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "study-graphql-with-nodejs API",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:9000/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "사용자 APIs",
+      "description": "User Rest Controller"
+    },
+    {
+      "name": "인증 APIs",
+      "description": "Authentication Rest Controller"
+    },
+    {
+      "name": "포스팅 APIs",
+      "description": "Post Rest Controller"
+    },
+    {
+      "name": "헬스체크 APIs",
+      "description": "Health Check Rest Controller"
+    }
+  ],
+  "paths": {
+    "/_hcheck": {
+      "get": {
+        "tags": ["헬스체크 APIs"],
+        "summary": "헬스체크 (API 토큰 필요없음)",
+        "operationId": "healthCheckUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_long_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    },
+    "/auth": {
+      "post": {
+        "tags": ["인증 APIs"],
+        "summary": "사용자 로그인 (API 토큰 필요없음)",
+        "operationId": "authenticationUsingPOST",
+        "requestBody": {
+          "description": "authRequest",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_AuthenticationResult_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    },
+    "/users/connections": {
+      "get": {
+        "tags": ["사용자 APIs"],
+        "summary": "내 친구 목록",
+        "operationId": "connectionsUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_List_ConnectedUser_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    },
+    "/users/exists": {
+      "post": {
+        "tags": ["사용자 APIs"],
+        "summary": "이메일 중복확인 (API 토큰 필요없음)",
+        "operationId": "checkEmailUsingPOST",
+        "requestBody": {
+          "description": "이메일 주소 객체",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailCheckRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_boolean_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    },
+    "/users/join": {
+      "post": {
+        "tags": ["사용자 APIs"],
+        "summary": "회원가입 (API 토큰 필요없음)",
+        "operationId": "joinUsingPOST",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/JoinRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_JoinResult_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    },
+    "/user/me": {
+      "get": {
+        "tags": ["사용자 APIs"],
+        "summary": "내 정보",
+        "operationId": "meUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_User_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    },
+    "/posts": {
+      "post": {
+        "tags": ["포스팅 APIs"],
+        "summary": "포스트 등록",
+        "operationId": "postsUsingPOST",
+        "requestBody": {
+          "description": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_Post_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    },
+    "/users/{userId}/posts": {
+      "get": {
+        "tags": ["포스팅 APIs"],
+        "summary": "포스트 목록 조회",
+        "operationId": "postsUsingGET",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "조회대상자 PK (본인 또는 친구)",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "ObjectId"
+            },
+            "example": "5f43e2062735f84b6747c93f"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_List_Post_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    },
+    "/users/{userId}/posts/{postId}/comments": {
+      "get": {
+        "tags": ["포스팅 APIs"],
+        "summary": "댓글 조회",
+        "operationId": "commentsUsingGET",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "조회대상자 PK (본인 또는 친구)",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "ObjectId"
+            },
+            "example": "5f43e2062735f84b6747c93f"
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "대상 포스트 PK",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "ObjectId"
+            },
+            "example": "5f43e1f4192c829b003e8fe3"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_List_Comment_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      },
+      "post": {
+        "tags": ["포스팅 APIs"],
+        "summary": "댓글 등록",
+        "operationId": "commentUsingPOST",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "조회대상자 PK (본인 또는 친구)",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "ObjectId"
+            },
+            "example": "5f43e2062735f84b6747c93f"
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "대상 포스트 PK",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "ObjectId"
+            },
+            "example": "5f43e1f4192c829b003e8fe3"
+          }
+        ],
+        "requestBody": {
+          "description": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CommentRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_Comment_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    },
+    "/user/{userId}/post/{postId}/like": {
+      "patch": {
+        "tags": ["포스팅 APIs"],
+        "summary": "포스트 좋아요",
+        "operationId": "likeUsingPATCH",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "조회대상자 PK (본인 또는 친구)",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "ObjectId"
+            },
+            "example": "5f43e2062735f84b6747c93f"
+          },
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "대상 포스트 PK",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "format": "ObjectId"
+            },
+            "example": "5f43e1f4192c829b003e8fe3"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResult_Post_"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false,
+        "security": [
+          {
+            "apiKey": ["global"]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ApiError": {
+        "title": "ApiError",
+        "required": ["message", "status"],
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "오류 메시지"
+          },
+          "status": {
+            "type": "integer",
+            "description": "오류코드",
+            "format": "int32"
+          }
+        }
+      },
+      "AuthenticationRequest": {
+        "title": "AuthenticationRequest",
+        "required": ["principal", "credentials"],
+        "type": "object",
+        "properties": {
+          "principal": {
+            "type": "string",
+            "description": "로그인 이메일"
+          },
+          "credentials": {
+            "type": "string",
+            "description": "로그인 비밀번호"
+          }
+        }
+      },
+      "AuthenticationResult": {
+        "title": "AuthenticationResult",
+        "required": ["apiToken", "user"],
+        "type": "object",
+        "properties": {
+          "apiToken": {
+            "type": "string",
+            "description": "API 토큰"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Comment": {
+        "title": "Comment",
+        "required": ["contents", "createAt", "seq"],
+        "type": "object",
+        "properties": {
+          "contents": {
+            "type": "string",
+            "description": "내용"
+          },
+          "createAt": {
+            "type": "string",
+            "description": "작성일시",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "string",
+            "description": "ID",
+            "format": "ObjectId"
+          },
+          "writer": {
+            "$ref": "#/components/schemas/Writer"
+          }
+        }
+      },
+      "CommentRequest": {
+        "title": "CommentRequest",
+        "type": "object",
+        "properties": {
+          "contents": {
+            "type": "string"
+          }
+        }
+      },
+      "ConnectedUser": {
+        "title": "ConnectedUser",
+        "required": ["email", "grantedAt", "name", "id"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "친구 ID",
+            "format": "ObjectId"
+          },
+          "email": {
+            "type": "string",
+            "description": "이메일",
+            "format": "email"
+          },
+          "grantedAt": {
+            "type": "string",
+            "description": "승락일시",
+            "format": "date-time"
+          },
+          "name": {
+            "type": "string",
+            "description": "이름"
+          },
+          "profileImageUrl": {
+            "type": "string",
+            "description": "프로필 이미지 URL"
+          }
+        }
+      },
+      "JoinRequest": {
+        "title": "JoinRequest",
+        "required": ["name", "principal", "credentials"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "이름"
+          },
+          "principal": {
+            "type": "string",
+            "description": "이메일"
+          },
+          "credentials": {
+            "type": "string",
+            "description": "비밀번호"
+          },
+          "profileImage": {
+            "type": "string",
+            "description": "프로파일 이미지",
+            "format": "binary"
+          }
+        }
+      },
+      "EmailCheckRequest": {
+        "title": "EmailCheckRequest",
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "이메일"
+          }
+        },
+        "example": {
+          "address": "harry@gmail.com"
+        }
+      },
+      "JoinResult": {
+        "title": "JoinResult",
+        "required": ["apiToken", "user"],
+        "type": "object",
+        "properties": {
+          "apiToken": {
+            "type": "string",
+            "description": "API 토큰"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Post": {
+        "title": "Post",
+        "required": ["comments", "contents", "createAt", "likes", "likesOfMe", "seq"],
+        "type": "object",
+        "properties": {
+          "comments": {
+            "type": "integer",
+            "description": "댓글 갯수",
+            "format": "int32"
+          },
+          "contents": {
+            "type": "string",
+            "description": "내용"
+          },
+          "createAt": {
+            "type": "string",
+            "description": "작성일시",
+            "format": "date-time"
+          },
+          "likes": {
+            "type": "integer",
+            "description": "좋아요 횟수",
+            "format": "int32"
+          },
+          "likesOfMe": {
+            "type": "boolean",
+            "description": "나의 좋아요 여부"
+          },
+          "id": {
+            "type": "string",
+            "description": "ID",
+            "format": "ObjectId"
+          },
+          "writer": {
+            "$ref": "#/components/schemas/Writer"
+          }
+        }
+      },
+      "User": {
+        "title": "User",
+        "required": ["createAt", "email", "loginCount", "name", "seq"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID",
+            "format": "ObjectId"
+          },
+          "name": {
+            "type": "string",
+            "description": "사용자명"
+          },
+          "email": {
+            "type": "string",
+            "description": "이메일",
+            "format": "email"
+          },
+          "lastLoginAt": {
+            "type": "string",
+            "description": "최종로그인일시",
+            "format": "date-time"
+          },
+          "loginCount": {
+            "type": "integer",
+            "description": "로그인 횟수",
+            "format": "int32"
+          },
+          "createAt": {
+            "type": "string",
+            "description": "생성일시",
+            "format": "date-time"
+          },
+          "profileImageUrl": {
+            "type": "string",
+            "description": "프로필 이미지 URL"
+          }
+        },
+        "example": {
+          "id": "5f4b3594e4ec9764e80ea8c7",
+          "name": "harry",
+          "email": "harry@gmail.com",
+          "loginCount": 3,
+          "lastLoginAt": "2020-09-08T12:23:21.000z",
+          "createdAt": "2020-09-08T12:23:21.000z",
+          "updatedAt": "2020-09-08T12:23:21.000z",
+          "profileImageUrl": "http://localhost:9000/uploads/harry.png"
+        }
+      },
+      "Writer": {
+        "title": "Writer",
+        "required": ["email"],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID",
+            "format": "ObjectId"
+          },
+          "email": {
+            "type": "string",
+            "description": "이메일",
+            "format": "email"
+          },
+          "name": {
+            "type": "string",
+            "description": "이름"
+          }
+        }
+      },
+      "ApiResult_AuthenticationResult_": {
+        "title": "ApiResult«AuthenticationResult»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "$ref": "#/components/schemas/AuthenticationResult"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      },
+      "ApiResult_Comment_": {
+        "title": "ApiResult«Comment»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "$ref": "#/components/schemas/Comment"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      },
+      "ApiResult_JoinResult_": {
+        "title": "ApiResult«JoinResult»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "$ref": "#/components/schemas/JoinResult"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      },
+      "ApiResult_List_Comment_": {
+        "title": "ApiResult«List«Comment»»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "type": "array",
+            "description": "success가 true라면, API 요청 처리 응답값",
+            "items": {
+              "$ref": "#/components/schemas/Comment"
+            }
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      },
+      "ApiResult_List_ConnectedUser_": {
+        "title": "ApiResult«List«ConnectedUser»»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "type": "array",
+            "description": "success가 true라면, API 요청 처리 응답값",
+            "items": {
+              "$ref": "#/components/schemas/ConnectedUser"
+            }
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      },
+      "ApiResult_List_Post_": {
+        "title": "ApiResult«List«Post»»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "type": "array",
+            "description": "success가 true라면, API 요청 처리 응답값",
+            "items": {
+              "$ref": "#/components/schemas/Post"
+            }
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      },
+      "ApiResult_Post_": {
+        "title": "ApiResult«Post»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "$ref": "#/components/schemas/Post"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      },
+      "ApiResult_User_": {
+        "title": "ApiResult«User»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "$ref": "#/components/schemas/User"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      },
+      "ApiResult_boolean_": {
+        "title": "ApiResult«boolean»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "type": "boolean",
+            "description": "success가 true라면, API 요청 처리 응답값"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      },
+      "ApiResult_long_": {
+        "title": "ApiResult«long»",
+        "required": ["success"],
+        "type": "object",
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/ApiError"
+          },
+          "response": {
+            "type": "integer",
+            "description": "success가 true라면, API 요청 처리 응답값",
+            "format": "int64"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "API 요청 처리 결과"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+<%- include('../partials/header') -%>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <h1>어드민 페이지</h1>
+</div>
+<h2>Welcome <%= user.name %></h2>
+<p>마지막 로그인 시간: <%= user.lastLoginAt.toLocaleString() %></p>
+<%- include('../partials/footer') -%>
