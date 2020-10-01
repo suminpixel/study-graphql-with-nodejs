@@ -6,7 +6,7 @@ if (result.error) {
 }
 logger.info(result.parsed);
 
-const routes = require('./routes/v1'); 
+const routes = require('./routes'); 
 
 const Server = require('./server');
 

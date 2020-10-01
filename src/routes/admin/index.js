@@ -2,16 +2,34 @@
 const user = require('../../controller/user');
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
+
 const router = require('express').Router();
+const passport = require('../../common/passport');
+
+//admin 인증이 필요한 기능은 해당 middleware을 거쳐야한다.
+const adminGuard = require('../../common/guard').guard('/admin/login');
 
 router.get('/', user.me);
 
+
 router.get('/login', (req, res) => {
-  res.render('pages/login');
+  const errorMessage = req.flash('loginErrorMessage');
+  res.render('pages/login', {
+    errorMessage,
+  });
 });
 
-router.get('/user', user.getUsers);
-router.post('/user', user.createUser);
+router.post(
+  '/login',
+  passport.authenticate('admin', {
+    successRedirect: '/admin/',
+    failureRedirect: '/admin/login',
+    failureFlash: true,
+  })
+);
+
+router.get('/user', adminGuard, user.getUsers);
+router.post('/user', adminGuard, user.createUser);
 router.get('/user/export-csv', user.exportToCsv);
 router.get('/user/:userId', user.getUser);
 router.post('/user/:userId', upload.single('image'), user.updateUser);
