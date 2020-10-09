@@ -3,10 +3,12 @@ const ApiError = require('../errors/ApiError');
 const logger = require('../common/logger');
 const User = require('../model/User');
 const CsvWriter = require('../common/csv-write-stream');
+const ConnectedUser = require('../database/schemas/ConnectedUser');
 
 const getConnections = async (req, res, next) => {
   try {
-    const followers = await ConnectedUser.find({ user: req.user._id })
+    const followers = await ConnectedUser
+      .find({ user: req.user._id })
       .select('follower')
       .populate({ path: 'follower', select: '-modifiedAt -createdAt' })
       .exec();

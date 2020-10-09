@@ -34,5 +34,6 @@ router.get('/user/export-csv', user.exportToCsv);
 router.get('/user/:userId', user.getUser);
 router.post('/user/:userId', upload.single('image'), user.updateUser);
 router.delete('/user/:userId', user.deleteUser);
+router.get('/users/export-csv', (req, res) => {});
 
 module.exports = router;

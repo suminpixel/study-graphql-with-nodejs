@@ -3,6 +3,7 @@ const http = require("http");
 const path = require("path"); //파일과 Directory 경로 작업을 위한 Utility를 제공
 const ApiError = require("./errors/ApiError");
 const cors = require('cors');
+const { ApolloServer } = require('apollo-server-express');
 const logger = require("./common/logger");
 const methodOverride = require("method-override"); //REST API 옵션중 HTML이 지원하지 않는 PUT, DELETE 매서드를 오버라이딩
 const swaggerUi = require("swagger-ui-express");
@@ -21,6 +22,20 @@ const ApiResult = require("./model/ApiResult");
 
 //DB 연결
 require('./database/connection'); 
+//Graphql 연결
+const schema = require('./graphql/schemas');
+
+const apolloServerConfig = {
+  schema,
+  playground: {
+    settings: {
+      'editor.theme': 'light',
+      'editor.cursorShape': 'line',
+    },
+  },
+};
+const apolloServer = new ApolloServer(apolloServerConfig);
+
 
 const app = express(); //express 서버 인스턴스 생성
 
@@ -80,6 +95,12 @@ module.exports = class Server {
   //라우팅 별도 설정
   router(routes) {
     routes(app);
+
+    // '/graphgl' 로 오는 요청은 그라프큐엘 통과
+    apolloServer.applyMiddleware({
+      app,
+      path: '/graphql',
+    });
 
     // 스웨거 api document 생성
     app.use(SWAGGER_API_SPEC, swaggerUi.serve);
